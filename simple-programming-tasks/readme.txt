@@ -1,0 +1,1 @@
+pamietac o tym ze tu trzeba dać screenshoty do kazdego kodu
