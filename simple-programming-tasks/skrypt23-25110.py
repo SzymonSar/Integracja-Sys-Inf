@@ -6,6 +6,6 @@ characters = string.ascii_uppercase + string.ascii_lowercase + string.digits
 slowa = []
 for x in range(1000):
     slowa.append(''.join(random.choice(characters) for x in range(6)))
-print(slowa)
 with open("passwords.txt",'w') as plik:
-    #tutaj kontynuacja
+    [plik.write(x+"\n") for x in slowa]
+    
