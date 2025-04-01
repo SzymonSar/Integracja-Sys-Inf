@@ -1,0 +1,1 @@
+select sex,body_mass_g from little_penguins order by body_mass_g DESC
