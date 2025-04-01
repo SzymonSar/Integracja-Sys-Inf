@@ -1,0 +1,5 @@
+select island as i, sex as s from penguins 
+where 
+i="Torgersen" and not s="FEMALE"
+or
+not i="Torgersen" and s="FEMALE"

@@ -1,0 +1,1 @@
+select CONCAT(species, ' ', island) AS what_where from penguins 

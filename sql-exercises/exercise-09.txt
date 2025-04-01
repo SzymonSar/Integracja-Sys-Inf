@@ -1,0 +1,1 @@
+select bill_length_mm/bill_depth_mm AS what_where from penguins 

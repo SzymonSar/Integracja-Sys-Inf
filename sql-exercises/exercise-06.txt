@@ -1,0 +1,1 @@
+select species as n from penguins where not n="Gentoo"
