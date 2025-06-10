@@ -1,0 +1,5 @@
+SELECT AVG(body_mass_g) 
+as average_body_mass
+FROM 
+(SELECT body_mass_g FROM penguins 
+WHERE body_mass_g > 3000);

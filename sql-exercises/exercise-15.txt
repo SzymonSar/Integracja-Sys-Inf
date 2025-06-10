@@ -1,0 +1,5 @@
+SELECT body_mass_g, COUNT(*) AS count
+FROM penguins
+WHERE body_mass_g IS NOT NULL
+GROUP BY body_mass_g
+ORDER BY body_mass_g;

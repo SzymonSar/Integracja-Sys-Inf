@@ -202,11 +202,7 @@ What happens if you try to delete rows that don't exist (e.g., all entries in wo
 
 **Zadanie 19**
 
-Saving and restoring data as text:
-
 1. Re-create the notes table in an in-memory database and then use SQLite's .output and .dump commands to save the database to a file called notes.sql. Inspect the contents of this file: how has your data been stored?
-
-2. Start a fresh SQLite session and load notes.sql using the .read command. Inspect the database using .schema and select *: is everything as you expected?
 
 **Plik**
 [exercise-19](./exercise-19.txt)
@@ -216,10 +212,6 @@ Saving and restoring data as text:
 
 
 **Zadanie 20**
-
-Saving and restoring data in binary format:
-
-1. Re-create the notes table in an in-memory database once again and use SQLite's .backup command to save it to a file called notes.db. Inspect this file using od -c notes.db or a text editor that can handle binary data: how has your data been stored?
 
 2. Start a fresh SQLite session and load notes.db using the .restore command. Inspect the database using .schema and select *: is everything as you expected?
 

@@ -1,0 +1,12 @@
+CREATE TABLE notes (
+  author TEXT,
+  note TEXT
+);
+
+INSERT INTO notes (author, note)
+VALUES 
+  ('Ala', 'Kup wode'),
+  ('Ola', 'dlugopis'),
+  ('Jan', 'hahaha');
+
+SELECT * FROM notes;

@@ -1,0 +1,4 @@
+SELECT 
+  AVG(CASE WHEN body_mass_g > 4500 THEN body_mass_g ELSE NULL END) AS avg_heavy,
+  AVG(CASE WHEN body_mass_g < 3500 THEN body_mass_g ELSE NULL END) AS avg_light
+FROM penguins;

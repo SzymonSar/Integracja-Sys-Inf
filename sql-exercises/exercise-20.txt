@@ -1,0 +1,2 @@
+sqlite> .read notes.sql
+sqlite> SELECT * FROM notes

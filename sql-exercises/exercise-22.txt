@@ -1,0 +1,3 @@
+select work.person, MIN(job.billable), job.name
+from work join job on work.job = job.name
+group by work.person
