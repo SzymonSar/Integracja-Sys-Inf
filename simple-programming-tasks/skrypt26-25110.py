@@ -1,59 +1,59 @@
-# Należało pobrać chromeDriver 
-# Używane komendy:
-#pip install selenium
-#pip freeze > requirements.txt
+#pip install requests beautifulsoup4
+import requests
+from bs4 import BeautifulSoup
 import csv
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.common.by import By
+import time
 
-class Home():
-
-    def __init__(self, header_name, price, price_m2):
+class Home:
+    def __init__(self, header_name, price, price_for_m2):
         self.header_name = header_name
         self.price = price
-        self.price_m2 = price_m2
+        self.price_for_m2 = price_for_m2
 
-    def return_data(self):
+    def to_dict(self):
         return {
-            'header_name': self.header_name,
-            'price': self.price,
-            'price_for_m2': self.price_m2
+            "header_name": self.header_name,
+            "price": self.price,
+            "price_for_m2": self.price_for_m2
         }
 
-def pobranie_postow():
-    service = Service('./chromedriver.exe')
-    driver = webdriver.Chrome(service=service)
-    driver.get('https://www.otodom.pl/pl/wyniki/sprzedaz/mieszkanie/pomorskie/gdynia/gdynia/gdynia?priceMax=600000&viewType=listing')
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+}
 
-    post_loaded = expected_conditions.presence_of_element_located((By.TAG_NAME, 'article'))
-    WebDriverWait(driver, 15).until(post_loaded)
+base_url = "https://www.otodom.pl/pl/oferty/sprzedaz/dom/gdynia"
+params = {
+    "priceMax": "600000",
+    "limit": "36",
+    "page": 1
+}
 
-    slownik = {}
-    i = 1
+homes = []
 
-    for post in driver.find_elements(By.TAG_NAME, 'article'):
-        tytul = post.find_element(By.CLASS_NAME, 'css-16vl3c1').text
-        cena = post.find_element(By.CLASS_NAME, 'css-afwkhs').text
-        cena_m2 = post.find_element(By.XPATH, ".//dt[text()='Cena za metr kwadratowy']/following-sibling::dd[1]/span").text
-        
-        home = Home(tytul, cena, cena_m2)
-        slownik[f'oferta_{i}'] = home
-        i += 1
+for page in range(1, 4): 
+    print(f"Pobieranie strony {page}")
+    params["page"] = page
+    response = requests.get(base_url, headers=headers, params=params)
+    soup = BeautifulSoup(response.text, "html.parser")
 
-    with open("home.csv", mode="w", newline="", encoding="utf-8") as plik:
-        writer = csv.writer(plik)
-        writer.writerow(["header_name", "price", "price_m2"]) #Nagłówki
-        
-        #Wypisanie elementów słownika
-        for key, oferta in slownik.items():
-            print(key, oferta.return_data())
-            writer.writerow([oferta.header_name, oferta.price, oferta.price_m2])
+    offers = soup.select("li[data-cy='listing-item']")
+
+    for offer in offers:
+        title = offer.select_one("h3").text.strip() if offer.select_one("h3") else "Brak"
+        price = offer.select_one("span[data-cy='listing-item-price']").text.strip() if offer.select_one("span[data-cy='listing-item-price']") else "Brak"
+        price_m2 = offer.select_one("p:contains('zł/m²')")
+        price_m2 = price_m2.text.strip() if price_m2 else "Brak"
+
+        home = Home(title, price, price_m2)
+        homes.append(home)
+
+    time.sleep(1)  
 
 
-    driver.stop_client()
+with open("home.csv", mode="w", newline="", encoding="utf-8") as file:
+    writer = csv.DictWriter(file, fieldnames=["header_name", "price", "price_for_m2"])
+    writer.writeheader()
+    for home in homes:
+        writer.writerow(home.to_dict())
 
-if __name__ == '__main__':
-    pobranie_postow()
+print(f"Zapisano {len(homes)} ofert do 'home.csv'.")
